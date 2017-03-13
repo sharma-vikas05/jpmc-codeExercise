@@ -33,9 +33,13 @@ public class TradeServiceImpl implements TradeService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TradeServiceImpl.class);
 
-    private final String INCOMING_REPORT_TYPE = "IncomingReport";
+    private final static String INCOMING_REPORT_TYPE = "IncomingReport";
 
-    private final String OUTGOING_REPORT_TYPE = "OutgoingReport";
+    private final static String OUTGOING_REPORT_TYPE = "OutgoingReport";
+
+    private final static String BUY_FLAG = "B";
+
+    private final static String SELL_FLAG = "S";
 
     public void recordTrade(TradeEntity tradeEntity) {
 
@@ -45,19 +49,10 @@ public class TradeServiceImpl implements TradeService {
 
         validateTradeEntity(tradeEntity);
 
-        if(this.tradeEntityMap.containsKey(tradeEntity.getEntityName())){
+        List<TradeEntity> tradeEntityList = this.tradeEntityMap.getOrDefault(tradeEntity.getEntityName() , new ArrayList<TradeEntity>());
 
-            LOGGER.debug("EntityType already exists in Map");
-            tradeEntityList = this.tradeEntityMap.get(tradeEntity.getEntityName());
-            tradeEntityList.add(tradeEntity);
-            this.tradeEntityMap.put(tradeEntity.getEntityName(), tradeEntityList);
-
-        }else{
-
-            tradeEntityList = new ArrayList<TradeEntity>();
-            tradeEntityList.add(tradeEntity);
-            this.tradeEntityMap.put(tradeEntity.getEntityName(), tradeEntityList);
-        }
+        tradeEntityList.add(tradeEntity);
+        this.tradeEntityMap.put(tradeEntity.getEntityName(), tradeEntityList);
 
         LOGGER.info("End TradeServiceImpl::recordTrade()");
 
@@ -80,9 +75,9 @@ public class TradeServiceImpl implements TradeService {
 
                 tradeEntity.setSettlementDate(settlementDate);
 
-                if(tradeEntity.getBuySellFlag().equals("B")){
+                if(BUY_FLAG.equals(tradeEntity.getBuySellFlag()){
                     outgoingList.add(tradeEntity);
-                }else if (tradeEntity.getBuySellFlag().equals("S")){
+                }else if (SELL_FLAG.equals(tradeEntity.getBuySellFlag()){
                     incomingList.add(tradeEntity);
                 }
             });
