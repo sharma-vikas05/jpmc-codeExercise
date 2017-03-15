@@ -45,8 +45,6 @@ public class TradeServiceImpl implements TradeService {
 
         LOGGER.info("Start TradeServiceImpl::recordTrade(), entityType: " + tradeEntity.getEntityName() );
 
-        List<TradeEntity> tradeEntityList;
-
         validateTradeEntity(tradeEntity);
 
         List<TradeEntity> tradeEntityList = this.tradeEntityMap.getOrDefault(tradeEntity.getEntityName() , new ArrayList<TradeEntity>());
@@ -75,9 +73,9 @@ public class TradeServiceImpl implements TradeService {
 
                 tradeEntity.setSettlementDate(settlementDate);
 
-                if(BUY_FLAG.equals(tradeEntity.getBuySellFlag()){
+                if(BUY_FLAG.equals(tradeEntity.getBuySellFlag())){
                     outgoingList.add(tradeEntity);
-                }else if (SELL_FLAG.equals(tradeEntity.getBuySellFlag()){
+                } else if (SELL_FLAG.equals(tradeEntity.getBuySellFlag())){
                     incomingList.add(tradeEntity);
                 }
             });
